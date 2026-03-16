@@ -1,0 +1,7 @@
+
+
+
+# id
+# brand
+# model
+# weight
