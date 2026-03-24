@@ -1,30 +1,30 @@
 # Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 
-# Virtual env
+# Python build
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
 venv/
 .venv/
-tms_backend/venv/
 
 # Environment
 .env
 .env.*
+!.env.example
 
 # IDE
 .vscode/
 .idea/
 
-# Frontend
-node_modules/
-.next/
-
 # OS
 .DS_Store
 Thumbs.db
 
-# Log
+# Logs
 *.log
 logs/
 
@@ -36,3 +36,34 @@ logs/
 
 # coverage
 .coverage
+htmlcov/
+
+# Node / Next.js
+node_modules/
+
+.next/
+out/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary
+tmp/
+temp/
+
+# Database (local)
+*.sqlite3
+*.db
+
+# Docker
+docker-compose.override.yml
+
+# Alembic
+alembic/__pycache__/
+
+*.envrc

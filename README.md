@@ -1,16 +1,20 @@
-## TMS SIROCCO
+# SIROCCO
+TMS, Digital CEO, AI agents
 
-## STACK:
+# STACK
 # backend
-    - python
-    - FastAPI
-    - PostgreSQL
-    - SQLAlchemy
-    - Pydantic
-    - Uvicorn
+python
+FastAPI
+PostgreSQL
+SQLAlchemy
+Pydantic
+Uvicorn
 # frontend
-    - Next.js
-    - TypeScript
+Next.js + TypeScript
+shadcn/ui
+TanStack Query
+TanStack Table
+Zustand№
 
 # uvicorn
 uvicorn app.main:app --reload
@@ -35,38 +39,11 @@ git commit -m "fead: add Alembic and initial database migration"
 git log --oneline
 
 git rm -r --cached venv
+# убрал файлы из индекса
+git rm -r --cached .
 
-feat — новая функциональность
+fead — новая функциональность
 fix — исправление ошибки
 refactor — изменение кода без изменения функциональности
 docs — изменения документации
 chore — технические изменения
-
-## BACKEND STRUCTURE
-    - models (Описывают таблицы базы данных)
-    - schemas (Проверяют и описывают выходные и выходные данные) create, update, read
-    - routers (Принимает запросы извне)
-    - servises (Сожержат бизнес-логику)
-    - database db (Подключение к БД, сессии, base)
-    - repositories (Прямые операции с БД)
-    - core (Общие настройки проекта)
-
-## MODELS
-    company:
-    vehicle:
-    city:
-    location:
-    employee:
-    driver:
-    document:
-
-                MODELS      SCHEMAS        routers
-company             x
-company_role        x
-company_account     x
-employee            x
-driver              x
-vehicle             x           x           x
-city                x           x           x
-location            x           x           x
-document            x                      
