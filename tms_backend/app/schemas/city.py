@@ -1,23 +1,16 @@
 import uuid
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import Field
+from app.schemas.base import ORMBaseSchema, BaseReadSchema
+from app.schemas.country import CountryRead
 
 
-class CityBase(BaseModel):
-    name: str = Field(..., max_length=50)
-    region: str = Field(..., max_length=50)
-    country: str = Field(..., max_length=50)
+class CityBase(ORMBaseSchema):
+    name: str = Field(..., max_length=255)
+    region: str = Field(..., max_length=255)
+    country_id: uuid.UUID
 
 class CityCreate(CityBase):
     pass
 
-class CityUpdate(BaseModel):
-    name: Optional[str] = Field(None, max_length=50)
-    region: Optional[str] = Field(None, max_length=50)
-    country: Optional[str] = Field(None, max_length=50)
-
-class CityRead(CityBase):
-    id: uuid.UUID
-    
-    class Config:
-        from_attributes = True
+class CityRead(CityBase, BaseReadSchema):
+    country: CountryRead

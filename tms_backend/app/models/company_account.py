@@ -1,18 +1,10 @@
-import enum
-
 from app.core.database import Base
 from app.models.base import BaseModelMixin
+from app.models.enums import CurrencyType
 
-from sqlalchemy import Column, String, Text, Boolean, DateTime, Enum, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, String, Text, Boolean, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-
-
-class Currency(str, enum.Enum):
-    KZT = "KZT"
-    USD = "USD"
-    RUB = "RUB"
-    EUR = "EUR"
 
 
 class CompanyAccount(Base, BaseModelMixin):
@@ -23,9 +15,8 @@ class CompanyAccount(Base, BaseModelMixin):
     bank_name = Column(String(255), nullable=False)
     bank_bik = Column(String(20), nullable=False)
     bank_account = Column(String(50), nullable=False)
-    currency = Column(Enum(Currency, name="currency_enum"), nullable=False)
+    currency = Column(CurrencyType, nullable=False)
     is_default = Column(Boolean, default=False, nullable=False)
-    
     swift = Column(String(20), nullable=True)
     note = Column(Text, nullable=True)
 

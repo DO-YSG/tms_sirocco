@@ -1,69 +1,80 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.models.company import Company
-from app.schemas.company import CompanyCreate, CompanyRead, CompanyUpdate
 from app.dependencies import get_db
-
+from app.services.company import CompanyService
+from app.schemas.company import (
+    CompanyCreate,
+    CompanyUpdate,
+    CompanyRead,
+)
 
 router = APIRouter(prefix="/companies", tags=["Companies"])
 
 
-@router.post("/", response_model=CompanyRead)
-def create_company(company: CompanyCreate, db: Session = Depends(get_db)):
-    db_company = Company(**company.model_dump())
-
-    db.add(db_company)
-    db.commit()
-    db.refresh(db_company)
-
-    return db_company
-
-
 @router.get("/", response_model=list[CompanyRead])
 def get_companies(db: Session = Depends(get_db)):
-    companies = db.query(Company).all()
-    return companies
+    service = CompanyService(db)
+    return service.get_all_companies()
 
 
 @router.get("/{company_id}", response_model=CompanyRead)
 def get_company(company_id: uuid.UUID, db: Session = Depends(get_db)):
-    company = db.query(Company).filter(Company.id == company_id).first()
+    service = CompanyService(db)
+    company = service.get_company_by_id(company_id)
 
     if not company:
-        raise HTTPException(status_code=404, detail="Company not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Company not found",
+        )
 
     return company
 
 
+@router.post("/", response_model=CompanyRead, status_code=status.HTTP_201_CREATED)
+def create_company(company_in: CompanyCreate, db: Session = Depends(get_db)):
+    service = CompanyService(db)
+
+    # бизнес-проверка
+    if service.company_exists_by_bin(company_in.company_bin):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Company with this BIN already exists",
+        )
+
+    return service.create_company(company_in)
+
+
 @router.put("/{company_id}", response_model=CompanyRead)
-def update_company(company_id: uuid.UUID, company_update: CompanyUpdate, db: Session = Depends(get_db)):
-    db_company = db.query(Company).filter(Company.id == company_id).first()
+def update_company(
+    company_id: uuid.UUID,
+    company_in: CompanyUpdate,
+    db: Session = Depends(get_db),
+):
+    service = CompanyService(db)
 
-    if not db_company:
-        raise HTTPException(status_code=404, detail="Company not found")
+    company = service.update_company(company_id, company_in)
 
-    update_data = company_update.model_dump(exclude_unset=True)
+    if not company:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Company not found",
+        )
 
-    for field, value in update_data.items():
-        setattr(db_company, field, value)
-
-    db.commit()
-    db.refresh(db_company)
-
-    return db_company
+    return company
 
 
-@router.delete("/{company_id}", status_code=204)
+@router.delete("/{company_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_company(company_id: uuid.UUID, db: Session = Depends(get_db)):
-    db_company = db.query(Company).filter(Company.id == company_id).first()
+    service = CompanyService(db)
 
-    if not db_company:
-        raise HTTPException(status_code=404, detail="Company not found")
+    deleted = service.delete_company(company_id)
 
-    db.delete(db_company)
-    db.commit()
-
-    return
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Company not found",
+        )

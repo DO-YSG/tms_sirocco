@@ -1,14 +1,14 @@
 import uuid
 
 from pydantic import BaseModel
+from pydantic.config import ConfigDict
 from typing import Optional
 from datetime import datetime
 
 class ORMBaseSchema(BaseModel):
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
-class BaseRaedSchema(ORMBaseSchema):
+class BaseReadSchema(ORMBaseSchema):
     id: uuid.UUID
     created_at: datetime
     updated_at: datetime
