@@ -23,8 +23,8 @@ class CompanyRole(Base, BaseModelMixin):
     role = Column(Enum(CompanyRoleList, name="company_role_list_enum"), nullable=False, index=True)
     note = Column(Text, nullable=True)
 
+    company = relationship("Company", back_populates="roles")
+
     __table_args__ = (
         UniqueConstraint("company_id", "role", name="uq_company_role"),
     )
-
-    company = relationship("Company", back_populates="roles")

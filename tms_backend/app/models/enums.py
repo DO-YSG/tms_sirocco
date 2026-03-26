@@ -12,6 +12,22 @@ class Currency(str, enum.Enum):
 CurrencyType = SAEnum(
     Currency,
     name="currency_enum",
-    create_type=True,
-    native_enum=True
+    create_type=False,
+    native_enum=True,
+    values_callable=lambda enum_cls: [e.value for e in enum_cls],
+)
+
+
+class CompanyStatus(str, enum.Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    BLOCKED = "blocked"
+    ARCHIVED = "archived"
+
+CompanyStatusType = SAEnum(
+    CompanyStatus,
+    name="company_status_enum",
+    create_type=False,
+    native_enum=True,
+    values_callable=lambda enum_cls: [e.value for e in enum_cls],
 )

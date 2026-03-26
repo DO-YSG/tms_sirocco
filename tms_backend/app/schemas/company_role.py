@@ -1,5 +1,4 @@
 import uuid
-from typing import Optional
 
 from app.schemas.base import ORMBaseSchema, BaseReadSchema
 from app.models.company_role import CompanyRoleList
@@ -7,7 +6,7 @@ from app.models.company_role import CompanyRoleList
 
 class CompanyRoleBase(ORMBaseSchema):
     role: CompanyRoleList
-    note: Optional[str] = None
+    note: str | None = None
 
 
 class CompanyRoleCreate(CompanyRoleBase):

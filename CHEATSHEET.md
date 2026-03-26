@@ -2,8 +2,11 @@
 uvicorn app.main:app --reload
 http://127.0.0.1:8000/docs
 
+# seed runner
+python -m app.scripts.seed_all
+
 # alembic
-alembic revision --autogenerate -m "описание изменения"
+alembic revision --autogenerate -m "descripton"
 alembic upgrade head
 
 alembic current
@@ -12,7 +15,7 @@ alembic history
 # db
 psql -U postgres -d tms_db          - вход в БД
 SELECT id, name FROM companies;     - посмотреть id компании
-DROP TABLE employees;               - удалить таблицу
+DROP TABLE employees CASCADE;       - удалить таблицу
 \q                                  - выход
 
 # git

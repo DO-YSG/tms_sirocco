@@ -1,10 +1,20 @@
 import uuid
+from typing import Sequence
 
 from sqlalchemy.orm import Session
 
-from app.models import Company
-from app.repositories.company import CompanyRepository
+from app.models.company import Company
+from app.models.enums import CompanyStatus
 from app.schemas.company import CompanyCreate, CompanyUpdate
+from app.repositories.company import CompanyRepository
+
+
+class CompanyNotFoundError(Exception):
+    pass
+
+
+class CompanyAlreadyExistsError(Exception):
+    pass
 
 
 class CompanyService:
@@ -12,35 +22,30 @@ class CompanyService:
         self.db = db
         self.repository = CompanyRepository(db)
 
-    def get_all_companies(self) -> list[Company]:
+    def get_all_companies(self) -> Sequence[Company]:
         return self.repository.get_all()
 
-    def get_company_by_id(self, company_id: uuid.UUID) -> Company | None:
-        return self.repository.get_by_id(company_id)
+    def get_all_companies_detailed(self) -> Sequence[Company]:
+        return self.repository.get_all_detailed()
 
-    def get_company_by_bin(self, company_bin: str) -> Company | None:
-        return self.repository.get_by_company_bin(company_bin)
+    def get_company_by_id(self, company_id: uuid.UUID) -> Company:
+        company = self.repository.get_by_id(company_id)
+        if not company:
+            raise CompanyNotFoundError("Company not found")
+        return company
 
-    def create_company(self, company_in: CompanyCreate) -> Company:
-        company = Company(
-            name=company_in.name,
-            short_name=company_in.short_name,
-            company_bin=company_in.company_bin,
-            country_id=company_in.country_id,
-            city_id=company_in.city_id,
-            legal_address=company_in.legal_address,
-            actual_address=company_in.actual_address,
-            phone=company_in.phone,
-            email=company_in.email,
-            website=company_in.website,
-            contact_person=company_in.contact_person,
-            contact_position=company_in.contact_position,
-            company_status=company_in.company_status,
-            note=company_in.note,
-        )
+    def get_company_by_id_detailed(self, company_id: uuid.UUID) -> Company:
+        company = self.repository.get_by_id_detailed(company_id)
+        if not company:
+            raise CompanyNotFoundError("Company not found")
+        return company
+
+    def create_company(self, data: CompanyCreate) -> Company:
+        if self.repository.exists_by_bin(data.company_bin):
+            raise CompanyAlreadyExistsError("Company with this BIN already exists")
 
         try:
-            self.repository.create(company)
+            company = self.repository.create(data)
             self.db.commit()
             self.db.refresh(company)
             return company
@@ -48,18 +53,17 @@ class CompanyService:
             self.db.rollback()
             raise
 
-    def update_company(self, company_id: uuid.UUID, company_in: CompanyUpdate) -> Company | None:
+    def update_company(self, company_id: uuid.UUID, data: CompanyUpdate) -> Company:
         company = self.repository.get_by_id(company_id)
         if not company:
-            return None
+            raise CompanyNotFoundError("Company not found")
 
-        update_data = company_in.model_dump(exclude_unset=True)
-
-        for field, value in update_data.items():
-            setattr(company, field, value)
+        if data.company_bin is not None and data.company_bin != company.company_bin:
+            if self.repository.exists_by_bin(data.company_bin):
+                raise CompanyAlreadyExistsError("Company with this BIN already exists")
 
         try:
-            self.repository.update(company)
+            company = self.repository.update(company, data)
             self.db.commit()
             self.db.refresh(company)
             return company
@@ -67,21 +71,16 @@ class CompanyService:
             self.db.rollback()
             raise
 
-    def delete_company(self, company_id: uuid.UUID) -> bool:
+    def archive_company(self, company_id: uuid.UUID) -> Company:
         company = self.repository.get_by_id(company_id)
         if not company:
-            return False
+            raise CompanyNotFoundError("Company not found")
 
         try:
-            self.repository.delete(company)
+            company.company_status = CompanyStatus.ARCHIVED
             self.db.commit()
-            return True
+            self.db.refresh(company)
+            return company
         except Exception:
             self.db.rollback()
             raise
-
-    def company_exists_by_id(self, company_id: uuid.UUID) -> bool:
-        return self.repository.exists_by_id(company_id)
-
-    def company_exists_by_bin(self, company_bin: str) -> bool:
-        return self.repository.exists_by_company_bin(company_bin)

@@ -12,4 +12,4 @@ class Country(Base, BaseModelMixin):
     code = Column(String(3), unique=True, nullable=False) # ISO 3166-1 alpha-3
 
     companies = relationship("Company", back_populates="country")
-    country = relationship("City", back_populates="country")
+    cities = relationship("City", back_populates="country")

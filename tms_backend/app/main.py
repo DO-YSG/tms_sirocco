@@ -6,6 +6,7 @@ from app.routers.city import router as city_router
 from app.routers.company import router as company_router
 from app.routers.company_role import router as company_role_router
 from app.routers.company_account import router as company_account_router
+from app.routers.city_distance import router as city_distance_roter
 
 from app.routers.vehicle import router as vehicle_router
 from app.routers.location import router as location_router
@@ -18,6 +19,7 @@ app.include_router(city_router)
 app.include_router(company_router)
 app.include_router(company_role_router)
 app.include_router(company_account_router)
+app.include_router(city_distance_roter)
 
 # app.include_router(vehicle_router)
 # app.include_router(location_router)

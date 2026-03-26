@@ -20,14 +20,8 @@ class CityRepository:
         return self.db.query(City).filter(City.country_id == country_id).order_by(City.name).all()
 
     def create(self, city: City) -> City:
-        try:
-            self.db.add(city)
-            self.db.commit()
-            self.db.refresh(city)
-            return city
-        except:
-            self.db.rollback()
-            raise
+        self.db.add(city)
+        return city
 
     def exists(self, name: str, region: str, country_id: uuid.UUID) -> bool:
         return self.db.query(City).filter(

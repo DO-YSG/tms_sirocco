@@ -13,7 +13,7 @@ router = APIRouter(prefix="/countries", tags=["countries"])
 @router.get("/", response_model=list[CountryRead])
 def get_countries(db: Session = Depends(get_db)):
     repo = CountryRepository(db)
-    return repo.get_all
+    return repo.get_all()
 
 
 @router.get("/{country_id}", response_model=CountryRead)

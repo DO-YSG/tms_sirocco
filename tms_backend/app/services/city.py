@@ -6,12 +6,15 @@ from sqlalchemy.orm import Session
 from app.models import City
 from app.repositories.city import CityRepository
 from app.schemas.city import CityCreate
+from app.repositories.country import CountryRepository
 
 
 class CityService:
 
     def __init__(self, db: Session):
+        self.db = db
         self.repo = CityRepository(db)
+        self.country_repo = CountryRepository(db)
 
     def get_all(self) -> list[City]:
         return self.repo.get_all()
@@ -26,8 +29,19 @@ class CityService:
         return self.repo.get_by_country(country_id)
 
     def create(self, data: CityCreate) -> City:
+        if not self.country_repo.get_by_id(data.country_id):
+            raise HTTPException(status_code=400, detail="Country not found")
+        
         if self.repo.exists(data.name, data.region, data.country_id):
             raise HTTPException(status_code=400, detail="City already exists in this region and country")
 
         city = City(**data.model_dump())
-        return self.repo.create(city)
+        
+        try:
+            self.repo.create(city)
+            self.db.commit()
+            self.db.refresh(city)
+            return city
+        except Exception:
+            self.db.rollback()
+            raise

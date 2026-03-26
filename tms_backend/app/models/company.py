@@ -1,18 +1,10 @@
-import enum
-
 from app.core.database import Base
 from app.models.base import BaseModelMixin
+from app.models.enums import CompanyStatusType, CompanyStatus
 
-from sqlalchemy import Column, String, Text, Enum, ForeignKey
+from sqlalchemy import Column, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-
-
-class CompanyStatus(str, enum.Enum):
-    active = "active"
-    inactive = "inactive"
-    blocked = "blocked"
-    archived = "archived"
 
 
 class Company(Base, BaseModelMixin):
@@ -30,10 +22,10 @@ class Company(Base, BaseModelMixin):
     website = Column(String(255), nullable=True)
     contact_person = Column(String(255), nullable=True)
     contact_position = Column(String(255), nullable=True)
-    company_status = Column(Enum(CompanyStatus, name="company_status_enum"), nullable=False, default=CompanyStatus.active, index=True)
+    company_status = Column(CompanyStatusType, nullable=False, default=CompanyStatus.ACTIVE, index=True)
     note = Column(Text, nullable=True)
 
     country = relationship("Country", back_populates="companies")
     city = relationship("City", back_populates="companies")
-    roles = relationship("CompanyRole", back_populates="company")
-    accounts = relationship("CompanyAccount", back_populates="company")
+    roles = relationship("CompanyRole", back_populates="company", cascade="all, delete-orphan")
+    accounts = relationship("CompanyAccount", back_populates="company", cascade="all, delete-orphan")

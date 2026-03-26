@@ -28,7 +28,7 @@ def get_city(city_id: uuid.UUID, db: Session = Depends(get_db)):
     return service.get_by_id(city_id)
 
 
-@router.post("/", response_model=CityRead)
+@router.post("/", response_model=CityRead, status_code=201)
 def create_city(data: CityCreate, db: Session = Depends(get_db)):
     service = CityService(db)
     return service.create(data)

@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional
+
 from pydantic import Field
 
 from app.schemas.base import ORMBaseSchema, BaseReadSchema
@@ -11,8 +11,8 @@ class CompanyAccountBase(ORMBaseSchema):
     bank_account: str = Field(..., max_length=50)
     currency: Currency
     is_default: bool = False
-    swift: Optional[str] = Field(None, max_length=20)
-    note: Optional[str] = None
+    swift: str | None = Field(None, max_length=20)
+    note: str | None = None
 
 
 class CompanyAccountCreate(CompanyAccountBase):
@@ -20,11 +20,11 @@ class CompanyAccountCreate(CompanyAccountBase):
 
 
 class CompanyAccountUpdate(ORMBaseSchema):
-    bank_name: Optional[str] = Field(None, max_length=255)
-    bank_bik: Optional[str] = Field(None, max_length=20)
-    is_default: Optional[bool] = None
-    swift: Optional[str] = Field(None, max_length=20)
-    note: Optional[str] = None
+    bank_name: str | None = Field(None, max_length=255)
+    bank_bik: str | None = Field(None, max_length=20)
+    is_default: bool | None = None
+    swift: str | None = Field(None, max_length=20)
+    note: str | None = None
 
 
 class CompanyAccountRead(CompanyAccountBase, BaseReadSchema):

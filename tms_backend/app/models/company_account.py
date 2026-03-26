@@ -20,8 +20,8 @@ class CompanyAccount(Base, BaseModelMixin):
     swift = Column(String(20), nullable=True)
     note = Column(Text, nullable=True)
 
+    company = relationship("Company", back_populates="accounts")
+
     __table_args__ = (
         UniqueConstraint("company_id", "bank_account", "currency", name="uq_company_account"),
     )
-
-    company = relationship("Company", back_populates="accounts")
