@@ -1,8 +1,8 @@
-from app.core.database import Base
-from app.models.base import BaseModelMixin
-
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+
+from app.core.database import Base
+from app.models.base import BaseModelMixin
 
 
 class Country(Base, BaseModelMixin):

@@ -5,7 +5,7 @@ from typing import Sequence
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from app.models.company import Company
+from app.models import Company
 from app.schemas.company import CompanyCreate, CompanyUpdate
 
 

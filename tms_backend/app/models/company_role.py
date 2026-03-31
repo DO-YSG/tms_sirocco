@@ -1,11 +1,11 @@
 import enum
 
+from sqlalchemy import Column, Text, Enum, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+
 from app.core.database import Base
 from app.models.base import BaseModelMixin
-
-from sqlalchemy import Column, Text, Enum, ForeignKey, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
 
 
 class CompanyRoleList(str, enum.Enum):

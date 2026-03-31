@@ -7,6 +7,7 @@ from app.models.company_role import CompanyRoleList
 
 
 class CompanyRoleRepository:
+    
     def __init__(self, db: Session):
         self.db = db
 

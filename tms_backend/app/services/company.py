@@ -4,7 +4,7 @@ from typing import Sequence
 from sqlalchemy.orm import Session
 
 from app.models.company import Company
-from app.models.enums import CompanyStatus
+from app.models.enums import Status
 from app.schemas.company import CompanyCreate, CompanyUpdate
 from app.repositories.company import CompanyRepository
 
@@ -77,7 +77,7 @@ class CompanyService:
             raise CompanyNotFoundError("Company not found")
 
         try:
-            company.company_status = CompanyStatus.ARCHIVED
+            company.company_status = Status.archived
             self.db.commit()
             self.db.refresh(company)
             return company

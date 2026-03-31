@@ -1,10 +1,10 @@
+from sqlalchemy import Column, String, Text, Boolean, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+
 from app.core.database import Base
 from app.models.base import BaseModelMixin
 from app.models.enums import CurrencyType
-
-from sqlalchemy import Column, String, Text, Boolean, ForeignKey, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
 
 
 class CompanyAccount(Base, BaseModelMixin):

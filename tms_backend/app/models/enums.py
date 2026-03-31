@@ -9,25 +9,24 @@ class Currency(str, enum.Enum):
     RUB = "RUB"
     EUR = "EUR"
 
-CurrencyType = SAEnum(
-    Currency,
-    name="currency_enum",
-    create_type=False,
-    native_enum=True,
-    values_callable=lambda enum_cls: [e.value for e in enum_cls],
-)
+CurrencyType = SAEnum(Currency, name="currency_enum", create_type=True)
 
 
-class CompanyStatus(str, enum.Enum):
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    BLOCKED = "blocked"
-    ARCHIVED = "archived"
+class Status(str, enum.Enum):
+    active = "active"
+    inactive = "inactive"
+    blocked = "blocked"
+    archived = "archived"
 
-CompanyStatusType = SAEnum(
-    CompanyStatus,
-    name="company_status_enum",
-    create_type=False,
-    native_enum=True,
-    values_callable=lambda enum_cls: [e.value for e in enum_cls],
-)
+StatusType = SAEnum(Status, name="status_enum", create_type=True)
+
+
+class LocationType(str, enum.Enum):
+    plant = "plant"
+    warehouse = "warehouse"
+    dealer = "dealer"
+    parking = "parking"
+    service = "service"
+    other = "other"
+
+LocationTypeType = SAEnum(LocationType, name="location_type_enum", create_type=True)

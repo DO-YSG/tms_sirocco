@@ -1,9 +1,10 @@
 import uuid
+from typing import Optional
+from datetime import datetime
 
 from pydantic import BaseModel
 from pydantic.config import ConfigDict
-from typing import Optional
-from datetime import datetime
+
 
 class ORMBaseSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)

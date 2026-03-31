@@ -1,30 +1,52 @@
 import uuid
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import Field, model_validator
 
-from app.models.location import LocationType
+from app.schemas.base import ORMBaseSchema, BaseReadSchema
+from app.models.enums import LocationType
 
 
-class LocationBase(BaseModel):
-    name: str = Field(..., max_length=100)
+class LocationBase(ORMBaseSchema):
+    name: str = Field(..., max_length=255)
     location_type: LocationType
-    city_id: uuid.UUID
-    address_line: Optional[str] = Field(None, max_length=200)
-    comment: Optional[str] = Field(None, max_length=300)
+    location_type_custom: str | None = None
+    address_line: str | None = Field(None, max_length=510)
+    note: str | None = None
+
+    @model_validator(mode="after")
+    def validator_location_type(self):
+        if self.location_type == LocationType.other and not self.location_type_custom:
+            raise ValueError("location_type_custom is required when location_type is 'other'")
+        
+        if self.location_type != LocationType.other and self.location_type_custom:
+            raise ValueError("location_type_custom must be empty unless location_type is 'other'")
+        
+        return self
+
 
 class LocationCreate(LocationBase):
-    pass
+    company_id: uuid.UUID
+    city_id: uuid.UUID
 
-class LocationUpdate(BaseModel):
-    name: Optional[str] = Field(None, max_length=100)
-    location_type: Optional[LocationType]  = None
-    city_id: Optional[uuid.UUID] = None
-    address_line: Optional[str] = Field(None, max_length=200)
-    comment: Optional[str] = Field(None, max_length=300)
 
-class LocationRead(LocationBase):
-    id: uuid.UUID
+class LocationUpdate(ORMBaseSchema):
+    name: str | None = Field(None, max_length=255)
+    location_type: LocationType | None = None
+    location_type_custom: str | None = None
+    address_line: str | None = Field(None, max_length=510)
+    note: str | None = None
+
+    @model_validator(mode="after")
+    def validator_location_type(self):
+        if self.location_type == LocationType.other and not self.location_type_custom:
+            raise ValueError("location_type_custom is required when location_type is 'other'")
     
-    class Config:
-        from_attributes = True
+        if self.location_type is not None and self.location_type != LocationType.other and self.location_type_custom:
+            raise ValueError("location_type_custom must be empty unless location_type is 'other'")
+    
+        return self
+
+
+class LocationRead(LocationBase, BaseReadSchema):
+    company_id: uuid.UUID
+    city_id: uuid.UUID

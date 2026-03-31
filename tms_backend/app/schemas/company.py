@@ -3,7 +3,7 @@ import uuid
 from pydantic import Field, EmailStr
 
 from app.schemas.base import ORMBaseSchema, BaseReadSchema
-from app.models.enums import CompanyStatus
+from app.models.enums import Status
 from app.schemas.country import CountryRead
 from app.schemas.city import CityRead
 
@@ -21,7 +21,7 @@ class CompanyBase(ORMBaseSchema):
     website: str | None = Field(None, max_length=255)
     contact_person: str | None = Field(None, max_length=255)
     contact_position: str | None = Field(None, max_length=255)
-    company_status: CompanyStatus = CompanyStatus.ACTIVE
+    company_status: Status = Status.active
     note: str | None = None
 
 
@@ -42,7 +42,7 @@ class CompanyUpdate(ORMBaseSchema):
     website: str | None = Field(None, max_length=255)
     contact_person: str | None = Field(None, max_length=255)
     contact_position: str | None = Field(None, max_length=255)
-    company_status: CompanyStatus | None = None
+    company_status: Status | None = None
     note: str | None = None
 
 

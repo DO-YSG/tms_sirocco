@@ -4,11 +4,11 @@ from typing import Sequence
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models.city_distance import CityDistance
+from app.models import CityDistance
 from app.schemas.city_distance import CityDistanceCreate, CityDistanceUpdate
 
 
-class CityDistanceRepository:
+class CityDistanceRepository:  
     def __init__(self, db: Session):
         self.db = db
 

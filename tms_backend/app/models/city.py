@@ -1,13 +1,13 @@
-from app.core.database import Base
-from app.models.base import BaseModelMixin
-
 from sqlalchemy import Column, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
+from app.core.database import Base
+from app.models.base import BaseModelMixin
+
 
 class City(Base, BaseModelMixin):
-    __tablename__ = "cities" 
+    __tablename__ = "cities"
     
     name = Column(String(255), nullable=False, index=True)
     region = Column(String(255), nullable=False)
@@ -15,6 +15,7 @@ class City(Base, BaseModelMixin):
 
     country = relationship("Country", back_populates="cities")
     companies = relationship("Company", back_populates="city")
+    locations = relationship("Location", back_populates="city")
 
     __table_args__ = (
         UniqueConstraint("name", "region", "country_id", name="uq_name_region_country"),
