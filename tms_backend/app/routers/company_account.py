@@ -7,7 +7,7 @@ from app.dependencies import get_db
 from app.services.company_account import CompanyAccountService
 from app.schemas.company_account import CompanyAccountCreate, CompanyAccountUpdate, CompanyAccountRead
 
-router = APIRouter(prefix="/companies/{company_id}/accounts", tags=["company accounts"])
+router = APIRouter(prefix="/companies/{company_id}/accounts", tags=["Company Accounts"])
 
 
 @router.get("/", response_model=list[CompanyAccountRead])

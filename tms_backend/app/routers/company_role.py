@@ -7,7 +7,7 @@ from app.dependencies import get_db
 from app.services.company_role import CompanyRoleService
 from app.schemas.company_role import CompanyRoleCreate, CompanyRoleRead
 
-router = APIRouter(prefix="/companies/{company_id}/roles", tags=["company roles"])
+router = APIRouter(prefix="/companies/{company_id}/roles", tags=["Company Roles"])
 
 
 @router.get("/", response_model=list[CompanyRoleRead])

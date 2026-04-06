@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional
+
 from datetime import datetime
 
 from pydantic import BaseModel
@@ -13,5 +13,5 @@ class BaseReadSchema(ORMBaseSchema):
     id: uuid.UUID
     created_at: datetime
     updated_at: datetime
-    created_by: Optional[uuid.UUID] = None
-    updated_by: Optional[uuid.UUID] = None
+    created_by: uuid.UUID | None = None
+    updated_by: uuid.UUID | None = None

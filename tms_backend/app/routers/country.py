@@ -1,13 +1,14 @@
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
+
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
 from app.repositories.country import CountryRepository
 from app.schemas.country import CountryRead
 
-router = APIRouter(prefix="/countries", tags=["countries"])
+router = APIRouter(prefix="/countries", tags=["Countries"])
 
 
 @router.get("/", response_model=list[CountryRead])

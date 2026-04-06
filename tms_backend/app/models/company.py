@@ -30,3 +30,5 @@ class Company(Base, BaseModelMixin):
     roles = relationship("CompanyRole", back_populates="company", cascade="all, delete-orphan")
     accounts = relationship("CompanyAccount", back_populates="company", cascade="all, delete-orphan")
     locations = relationship("Location", back_populates="company")
+    drivers = relationship("Driver", back_populates="company")
+    vehicles = relationship("Vehicle", back_populates="owner", passive_deletes=True)

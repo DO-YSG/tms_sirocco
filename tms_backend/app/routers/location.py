@@ -8,7 +8,7 @@ from app.schemas.location import LocationCreate, LocationUpdate, LocationRead
 from app.services.location import LocationService
 
 
-router = APIRouter(prefix="/locations", tags=["locations"])
+router = APIRouter(prefix="/locations", tags=["Locations"])
 
 
 @router.post("/", response_model=LocationRead, status_code=status.HTTP_201_CREATED)

@@ -1,4 +1,3 @@
-# repositories/company_account.py
 import uuid
 from typing import Optional
 

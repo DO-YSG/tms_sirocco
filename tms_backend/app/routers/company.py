@@ -8,7 +8,7 @@ from app.services.company import CompanyService, CompanyNotFoundError, CompanyAl
 
 from app.schemas.company import CompanyCreate, CompanyUpdate, CompanyRead
 
-router = APIRouter(prefix="/companies", tags=["companies"])
+router = APIRouter(prefix="/companies", tags=["Companies"])
 
 
 @router.get("/", response_model=list[CompanyRead])

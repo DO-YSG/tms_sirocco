@@ -14,6 +14,6 @@ class CityDistance(Base, BaseModelMixin):
 
     __table_args__ = (
         UniqueConstraint("city1_id", "city2_id", name="uq_city_distance"),
-        CheckConstraint("city1_id <> city2_id", name="ck_city_distance_not_same_city"),
+        CheckConstraint("city1_id != city2_id", name="ck_city_distance_not_same_city"),
         CheckConstraint("distance_km > 0", name="ck_city_distance_positive"),
     )

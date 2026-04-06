@@ -5,9 +5,9 @@ from .company_role import CompanyRole
 from .company_account import CompanyAccount
 from .city_distance import CityDistance
 from .location import Location
-
+from .driver import Driver
+from .driver_license_category import DriverLicenseCategory
+from .vehicle import Vehicle
 
 # from .document import Document
-# from .driver import Driver
 # from .employee import Employee
-# from .vehicle import Vehicle

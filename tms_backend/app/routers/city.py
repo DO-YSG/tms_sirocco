@@ -7,7 +7,7 @@ from app.dependencies import get_db
 from app.services.city import CityService
 from app.schemas.city import CityCreate, CityRead
 
-router = APIRouter(prefix="/cities", tags=["cities"])
+router = APIRouter(prefix="/cities", tags=["Cities"])
 
 
 @router.get("/", response_model=list[CityRead])

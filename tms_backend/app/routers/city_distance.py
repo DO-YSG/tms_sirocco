@@ -7,7 +7,7 @@ from app.dependencies import get_db
 from app.schemas.city_distance import CityDistanceCreate, CityDistanceRead, CityDistanceUpdate
 from app.services.city_distance import CityDistanceAlreadyExistsError, CityDistanceNotFoundError, CityDistanceService
 
-router = APIRouter(prefix="/city-distances", tags=["city distances"])
+router = APIRouter(prefix="/city-distances", tags=["City Distances"])
 
 
 @router.get("/", response_model=list[CityDistanceRead])
